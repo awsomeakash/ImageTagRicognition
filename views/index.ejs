@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>Node Vision</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src='/javascripts/jquery.min.js'></script>
+    <script src='/javascripts/app.js'></script>
+    <script>
+      $(document).ready(function() {
+        $('#classify').on('click', function() {
+          var formData = new FormData();
+          var fileInput = document.getElementById('file');
+          formData.append('file', fileInput.files[0]);
+
+          $.ajax({
+            url: '/vision/classify',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              var labelsContainer = document.getElementById('label-list');
+              labelsContainer.innerHTML = '';
+              data.labels.forEach(function(label) {
+                var labelElement = document.createElement('div');
+                labelElement.innerText = label;
+                labelsContainer.appendChild(labelElement);
+              });
+              $('#labels').removeClass('hidden');
+              $('#error').addClass('hidden');
+            },
+            error: function(error) {
+              $('#error').text('Error: ' + error.responseJSON.error);
+              $('#error').removeClass('hidden');
+              $('#labels').addClass('hidden');
+            }
+          });
+        });
+
+        $('#reset').on('click', function() {
+          var labelsContainer = document.getElementById('label-list');
+          labelsContainer.innerHTML = '';
+          $('#labels').addClass('hidden');
+          $('#error').addClass('hidden');
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class='header'>
+      <div>Welcome to Node Vision</div>
+    </div>
+
+    <div class='container'>
+      <!-- Form section -->
+      <div class='form'>
+        <form enctype="multipart/form-data">
+          <div class='form-group'>
+            <label class='form-input' for='file'>Image to Classify</label>
+            <div class='browse'>
+              Browse
+              <input type='file' id='file' name='file' accept='image/jpeg,image/png' />
+            </div>
+          </div>
+          <div class='img-preview hidden' id='preview'></div>
+          <div class='action-btns'>
+            <div class='btn' id='classify'>Classify</div>
+            <div class='btn btn-cancel' id='reset'>Reset</div>
+          </div>
+        </form>
+      </div>
+
+      <div class='hr'></div>
+
+      <!-- Result section -->
+      <div class='footer'>
+        <div class='result-container'>
+          <div class='hidden' id='labels'>
+            <div id='label-list'></div>
+          </div>
+          <div class='error hidden' id='error'></div>
+        </div>
+        <div class='highlight'><b>Note:</b> If you see an alert that starts with <i>Unrecoverable Error:</i>, then it means that you have not returned the response as given in the instructions!</div>
+      </div>
+    </div>
+
+    <script src='/javascripts/jquery.min.js'></script>
+    <script src='/javascripts/app.js'></script>
+  </body>
+</html>

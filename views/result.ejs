@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>Node Vision Result</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src='/javascripts/jquery.min.js'></script>
+    <script src='/javascripts/app.js'></script>
+  </head>
+  <body>
+    <div class='header'>
+      <div>Welcome to Node Vision</div>
+    </div>
+    <div class='container'>
+      <div class='form'>
+        <form enctype="multipart/form-data">
+          <div class='form-group'>
+            <label class='form-input' for='file'>Image to Classify</label>
+            <div class='browse'>
+              Browse
+              <input type='file' id='file' name='file' accept='image/jpeg,image/png' />
+            </div>
+          </div>
+          <div class='img-preview hidden' id='preview'></div>
+          <div class='action-btns'>
+            <div class='btn' id='classify'>Classify</div>
+            <div class='btn btn-cancel' id='reset'>Reset</div>
+          </div>
+        </form>
+      </div>
+      <div class='hr'></div>
+      <!-- Result section -->
+      <div class='footer'>
+        <div class='result-container'>
+          <div id='labels'>
+            <% labels.forEach(function(label) { %>
+              <div><%= label %></div>
+            <% }); %>
+          </div>
+          <div class='error hidden' id='error'></div>
+        </div>
+        <div class='highlight'><b>Note:</b> If you see an alert that starts with <i>Unrecoverable Error:</i>, then it means that you have not returned the response as given in the instructions!</div>
+      </div>
+    </div>
+  </body>
+</html>
