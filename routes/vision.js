@@ -28,10 +28,19 @@ router.post('/classify', function(req, res, next) {
 
   rekognition.detectLabels(params, (err, data) => {
     if (err) {
-      console.error(err);
-      res.status(500).json({
-        'error': 'Unable to process the request'
-      });
+      console.error(err); // Log the error for debugging purposes
+
+      if (err.code === 'InvalidParameterException') {
+        // Handle specific error: Unsupported file format
+        res.status(400).json({
+          'error': err.message || 'Unsupported file format. Please upload a valid image file.'
+        });
+      } else {
+        // Handle other errors with the error message from the server
+        res.status(500).json({
+          'error': err.message || 'Unable to process the request'
+        });
+      }
     } else {
       const labels = data.Labels.map(label => label.Name);
       res.json({
